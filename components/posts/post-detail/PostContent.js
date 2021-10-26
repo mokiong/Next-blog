@@ -1,5 +1,7 @@
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
+import { Prism } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 import PostHeader from './PostHeader';
 import classes from './post-content.module.css';
@@ -10,8 +12,8 @@ function PostContent(props) {
     const imagePath = `/images/posts/${post.slug}/${post.image}`;
 
     const MarkdownComponents = {
-        // Convert Markdown img to next/image component and set height, width and priority
-        // example: ![AltText {priority}{768x432}](...
+        // // Convert Markdown img to next/image component and set height, width and priority
+        // // example: ![AltText {priority}{768x432}](...
         p: (paragraph) => {
             const { node } = paragraph;
 
@@ -37,9 +39,28 @@ function PostContent(props) {
                     />
                 );
             }
+
+            if (node.children[0].tagName === 'code') {
+                return <Prism language="" children />;
+            }
+
             return <p>{paragraph.children}</p>;
         },
+        code: (code) => {
+            const { className, children } = code;
+
+            const language = className.split('-')[1];
+
+            return (
+                <Prism
+                    style={atomDark}
+                    language={language}
+                    children={children}
+                />
+            );
+        },
     };
+
     return (
         <article className={classes.content}>
             <PostHeader title={post.title} image={imagePath} />
