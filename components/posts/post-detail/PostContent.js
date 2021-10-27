@@ -1,10 +1,15 @@
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
-import { Prism } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { PrismLight } from 'react-syntax-highlighter';
+import atomDark from 'react-syntax-highlighter/dist/cjs/styles/prism/atom-dark';
+import js from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
+import css from 'react-syntax-highlighter/dist/cjs/languages/prism/css';
 
 import PostHeader from './PostHeader';
 import classes from './post-content.module.css';
+
+PrismLight.registerLanguage('js', js);
+PrismLight.registerLanguage('css', css);
 
 function PostContent(props) {
     const { post } = props;
@@ -41,7 +46,7 @@ function PostContent(props) {
             }
 
             if (node.children[0].tagName === 'code') {
-                return <Prism language="" children />;
+                return <PrismLight language="" children />;
             }
 
             return <p>{paragraph.children}</p>;
@@ -52,7 +57,7 @@ function PostContent(props) {
             const language = className.split('-')[1];
 
             return (
-                <Prism
+                <PrismLight
                     style={atomDark}
                     language={language}
                     children={children}
